@@ -1,0 +1,22 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Redirect to index.php if file doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Security: Prevent directory listing
+Options -Indexes
+
+# Security: Protect config files
+<FilesMatch "^(database|app)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# PHP Settings
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+php_value max_execution_time 300
+php_value max_input_time 300

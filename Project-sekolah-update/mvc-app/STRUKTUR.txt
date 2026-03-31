@@ -1,0 +1,171 @@
+PROJECT SEKOLAH - STRUKTUR FOLDER
+==================================
+
+mvc-app/
+│
+├── index.php                    # Front Controller / Router utama
+├── database.sql                 # File SQL untuk import database
+├── .htaccess                    # Konfigurasi Apache (optional)
+├── README.md                    # Dokumentasi lengkap
+│
+├── config/                      # Folder konfigurasi
+│   ├── database.php            # Konfigurasi koneksi database
+│   └── app.php                 # Konfigurasi aplikasi & helper functions
+│
+├── models/                      # Folder Model (Database Logic)
+│   ├── User.php                # Model untuk tabel users
+│   ├── Mahasiswa.php           # Model untuk tabel mahasiswa
+│   └── Product.php             # Model untuk tabel products
+│
+├── controllers/                 # Folder Controller (Business Logic)
+│   ├── AuthController.php      # Controller untuk autentikasi (login/logout)
+│   ├── HomeController.php      # Controller untuk dashboard/home
+│   ├── MahasiswaController.php # Controller untuk CRUD mahasiswa
+│   └── ProductController.php   # Controller untuk CRUD products
+│
+├── views/                       # Folder View (Presentation Layer)
+│   ├── layouts/                # Layout templates
+│   │   ├── header.php         # Header dengan navbar (Bootstrap 5)
+│   │   └── footer.php         # Footer
+│   │
+│   ├── auth/                   # Views untuk autentikasi
+│   │   └── login.php          # Halaman login
+│   │
+│   ├── home.php                # Halaman dashboard
+│   │
+│   ├── mahasiswa/              # Views untuk mahasiswa
+│   │   ├── index.php          # List/tabel mahasiswa
+│   │   ├── create.php         # Form tambah mahasiswa
+│   │   └── edit.php           # Form edit mahasiswa
+│   │
+│   └── products/               # Views untuk products
+│       ├── index.php          # List/tabel products (dengan search)
+│       ├── create.php         # Form tambah product
+│       └── edit.php           # Form edit product
+│
+└── public/                      # Folder public assets
+    ├── css/                    # CSS files (kosong, menggunakan Bootstrap CDN)
+    ├── js/                     # JavaScript files (kosong)
+    └── uploads/                # Folder untuk upload foto mahasiswa
+        └── .gitkeep           # Placeholder file
+
+
+ALUR KERJA MVC
+==============
+
+1. USER REQUEST
+   ↓
+2. index.php (Front Controller)
+   - Menerima semua request
+   - Routing ke controller yang tepat
+   ↓
+3. CONTROLLER
+   - Menerima input dari user
+   - Validasi data
+   - Memanggil MODEL
+   ↓
+4. MODEL
+   - Berinteraksi dengan database
+   - Memproses data
+   - Mengembalikan hasil ke CONTROLLER
+   ↓
+5. CONTROLLER
+   - Menerima data dari MODEL
+   - Mengirim data ke VIEW
+   ↓
+6. VIEW
+   - Menerima data dari CONTROLLER
+   - Render HTML dengan data
+   ↓
+7. RESPONSE ke USER
+
+
+ROUTING SYSTEM
+==============
+
+URL Pattern: index.php?page=[PAGE]&action=[ACTION]&id=[ID]
+
+Contoh:
+- index.php?page=home                           → Dashboard
+- index.php?page=login                          → Halaman Login
+- index.php?page=login&action=logout            → Logout
+- index.php?page=mahasiswa                      → List Mahasiswa
+- index.php?page=mahasiswa&action=create        → Form Tambah Mahasiswa
+- index.php?page=mahasiswa&action=edit&id=1     → Form Edit Mahasiswa
+- index.php?page=mahasiswa&action=delete&id=1   → Hapus Mahasiswa
+- index.php?page=products                       → List Products
+- index.php?page=products&search=laptop         → Search Products
+
+
+DATABASE SCHEMA
+===============
+
+Table: users
+- id (INT, PK, AUTO_INCREMENT)
+- username (VARCHAR(50), UNIQUE)
+- password (VARCHAR(255))
+- role (ENUM: 'admin', 'user')
+
+Table: mahasiswa
+- id (INT, PK, AUTO_INCREMENT)
+- nim (VARCHAR(20), UNIQUE)
+- name (VARCHAR(100))
+- jurusan (VARCHAR(100))
+- foto (VARCHAR(255), NULLABLE)
+- alamat (TEXT)
+- created_at (TIMESTAMP)
+- updated_at (TIMESTAMP)
+
+Table: products
+- id (INT, PK, AUTO_INCREMENT)
+- name (VARCHAR(100))
+- price (DECIMAL(10,2))
+- created_at (TIMESTAMP)
+- updated_at (TIMESTAMP)
+
+
+FITUR KEAMANAN
+==============
+
+✓ Password Hashing (bcrypt via password_hash())
+✓ SQL Injection Prevention (Prepared Statements)
+✓ XSS Prevention (htmlspecialchars())
+✓ Session Management
+✓ Role-Based Access Control (RBAC)
+✓ File Upload Validation
+✓ CSRF Protection (dapat ditambahkan)
+
+
+TEKNOLOGI
+=========
+
+Backend:
+- PHP 7.4+ (Native, no framework)
+- MySQL/MariaDB
+- MySQLi Extension
+
+Frontend:
+- HTML5
+- CSS3
+- JavaScript (Vanilla)
+- Bootstrap 5.3 (CDN)
+- Bootstrap Icons (CDN)
+
+Architecture:
+- MVC Pattern
+- Front Controller Pattern
+- Session-based Authentication
+
+
+DEFAULT ACCOUNTS
+================
+
+Admin:
+- Username: admin
+- Password: admin123
+- Access: Full (Create, Read, Update, Delete)
+
+User:
+- Username: user
+- Password: user123
+- Access: Limited (Create, Read only)
